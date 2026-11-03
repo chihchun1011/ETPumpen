@@ -1,0 +1,216 @@
+# 214 BodyParts3D muscle parts used for the 3D body. Columns: BodyParts3D file id, muscle key, side, triangle budget, part name.
+# Key "other" is drawn gray and not tracked.
+BP44	forearms	L	252	humeral head of left extensor carpi ulnaris
+BP45	forearms	R	254	humeral head of right extensor carpi ulnaris
+BP46	forearms	L	160	ulnar head of left extensor carpi ulnaris
+BP47	forearms	R	158	ulnar head of right extensor carpi ulnaris
+FMA13336	obliques	R	4492	right external oblique
+FMA13337	obliques	L	4476	left external oblique
+FMA13358	lats	R	4110	right latissimus dorsi
+FMA13359	lats	L	4102	left latissimus dorsi
+FMA13375	pecs	R	342	right pectoralis minor
+FMA13376	pecs	L	340	left pectoralis minor
+FMA13377	abs	R	1624	right rectus abdominis
+FMA13378	abs	L	1614	left rectus abdominis
+FMA13381	midback	R	388	right rhomboid major
+FMA13382	midback	L	390	left rhomboid major
+FMA13383	midback	R	158	right rhomboid minor
+FMA13384	midback	L	158	left rhomboid minor
+FMA13398	other	R	1964	right serratus anterior
+FMA13399	other	L	1960	left serratus anterior
+FMA13403	other	R	450	right serratus posterior superior
+FMA13404	other	L	442	left serratus posterior superior
+FMA13405	other	R	720	right serratus posterior inferior
+FMA13406	other	L	718	left serratus posterior inferior
+FMA13408	other	R	392	right sternocleidomastoid
+FMA13409	other	L	388	left sternocleidomastoid
+FMA13414	other	R	522	right subscapularis
+FMA13415	other	L	520	left subscapularis
+FMA13892	obliques	R	3422	right internal oblique
+FMA13893	obliques	L	3410	left internal oblique
+FMA22322	other	R	778	right iliacus
+FMA22323	other	L	774	left iliacus
+FMA22324	other	R	292	right obturator internus
+FMA22325	other	L	290	left obturator internus
+FMA22326	other	R	202	right obturator externus
+FMA22327	other	L	200	left obturator externus
+FMA22328	glutes	R	1660	right gluteus maximus
+FMA22329	glutes	L	1648	left gluteus maximus
+FMA22330	glutemed	R	912	right gluteus medius
+FMA22331	glutemed	L	902	left gluteus medius
+FMA22332	glutemed	R	502	right gluteus minimus
+FMA22333	glutemed	L	498	left gluteus minimus
+FMA22334	other	R	160	right gemellus superior
+FMA22335	other	L	158	left gemellus superior
+FMA22336	other	R	160	right gemellus inferior
+FMA22337	other	L	160	left gemellus inferior
+FMA22338	other	R	160	right quadratus femoris
+FMA22339	other	L	158	left quadratus femoris
+FMA22340	other	R	254	right piriformis
+FMA22341	other	L	252	left piriformis
+FMA22342	other	R	1002	right psoas major
+FMA22343	other	L	992	left psoas major
+FMA22344	obliques	R	3972	right transversus abdominis
+FMA22345	obliques	L	3970	left transversus abdominis
+FMA22348	lowback	R	484	right quadratus lumborum
+FMA22349	lowback	L	482	left quadratus lumborum
+FMA22354	other	R	962	right sartorius
+FMA22355	other	L	954	left sartorius
+FMA22358	hams	R	800	right semitendinosus
+FMA22359	hams	L	794	left semitendinosus
+FMA22425	glutemed	R	348	right tensor fasciae latae
+FMA22426	glutemed	L	344	left tensor fasciae latae
+FMA22448	hams	R	1364	right semimembranosus
+FMA22449	hams	L	1348	left semimembranosus
+FMA22450	adductors	R	364	right pectineus
+FMA22451	adductors	L	362	left pectineus
+FMA22452	adductors	R	392	right adductor brevis
+FMA22454	adductors	L	386	left adductor brevis
+FMA22456	adductors	R	702	right adductor longus
+FMA22457	adductors	L	698	left adductor longus
+FMA22459	adductors	R	1566	right adductor magnus
+FMA22460	adductors	L	1558	left adductor magnus
+FMA22544	shins	R	666	right tibialis anterior
+FMA22545	shins	L	652	left tibialis anterior
+FMA22546	shins	R	188	right extensor hallucis longus
+FMA22547	shins	L	186	left extensor hallucis longus
+FMA22548	shins	R	518	right extensor digitorum longus
+FMA22549	shins	L	512	left extensor digitorum longus
+FMA22550	shins	R	158	right fibularis tertius
+FMA22551	shins	L	158	left fibularis tertius
+FMA22552	shins	R	496	right fibularis longus
+FMA22553	shins	L	492	left fibularis longus
+FMA22554	shins	R	272	right fibularis brevis
+FMA22555	shins	L	270	left fibularis brevis
+FMA22558	calves	R	1248	right soleus
+FMA22559	calves	L	1236	left soleus
+FMA22591	other	R	202	right popliteus
+FMA22592	other	L	198	left popliteus
+FMA22726	other	R	350	right splenius cervicis
+FMA22727	other	L	350	left splenius cervicis
+FMA22728	other	R	408	right splenius capitis
+FMA22729	other	L	408	left splenius capitis
+FMA22740	lowback	R	826	right iliocostalis lumborum
+FMA22741	lowback	L	822	left iliocostalis lumborum
+FMA22742	lowback	R	438	right iliocostalis thoracis
+FMA22743	lowback	L	430	left iliocostalis thoracis
+FMA22751	lowback	R	1296	right longissimus thoracis
+FMA22753	lowback	L	1282	left longissimus thoracis
+FMA22779	lowback	R	250	right spinalis thoracis
+FMA22780	lowback	L	244	left spinalis thoracis
+FMA22872	lowback	R	398	right semispinalis thoracis
+FMA22873	lowback	L	388	left semispinalis thoracis
+FMA22874	other	R	192	right semispinalis cervicis
+FMA22875	other	L	188	left semispinalis cervicis
+FMA22876	other	R	210	right semispinalis capitis
+FMA22877	other	L	210	left semispinalis capitis
+FMA22878	lowback	R	920	right multifidus
+FMA22879	lowback	L	890	left multifidus
+FMA32540	other	R	236	right levator scapulae
+FMA32541	other	L	234	left levator scapulae
+FMA32544	other	R	260	right supraspinatus
+FMA32545	other	L	258	left supraspinatus
+FMA32547	other	R	558	right infraspinatus muscle
+FMA32548	other	L	556	left infraspinatus muscle
+FMA32551	lats	R	304	right teres major
+FMA32552	lats	L	302	left teres major
+FMA32553	other	R	260	right teres minor
+FMA32554	other	L	260	left teres minor
+FMA33581	midback	R	1292	ascending part of right trapezius
+FMA33583	midback	L	1276	ascending part of left trapezius
+FMA33584	traps	R	550	transverse part of right trapezius
+FMA33585	traps	L	548	transverse part of left trapezius
+FMA33586	traps	R	808	descending part of right trapezius
+FMA33587	traps	L	786	descending part of left trapezius
+FMA34680	delt_f	R	510	clavicular part of right deltoid
+FMA34681	delt_f	L	506	clavicular part of left deltoid
+FMA34682	delt_s	R	530	acromial part of right deltoid
+FMA34683	delt_s	L	526	acromial part of left deltoid
+FMA34684	delt_r	R	794	spinal part of right deltoid
+FMA34685	delt_r	L	788	spinal part of left deltoid
+FMA34690	pecs	R	432	clavicular part of right pectoralis major
+FMA34691	pecs	L	430	clavicular part of left pectoralis major
+FMA37665	biceps	R	206	right coracobrachialis
+FMA37666	biceps	L	204	left coracobrachialis
+FMA37668	biceps	R	658	right brachialis
+FMA37669	biceps	L	650	left brachialis
+FMA37684	biceps	R	526	short head of right biceps brachii
+FMA37685	biceps	L	518	short head of left biceps brachii
+FMA37686	biceps	R	604	long head of right biceps brachii
+FMA37687	biceps	L	596	long head of left biceps brachii
+FMA37695	triceps	R	510	medial head of right triceps brachii
+FMA37696	triceps	L	508	medial head of left triceps brachii
+FMA37697	triceps	R	676	lateral head of right triceps brachii
+FMA37698	triceps	L	668	lateral head of left triceps brachii
+FMA37699	triceps	R	714	long head of right triceps brachii
+FMA37700	triceps	L	708	long head of left triceps brachii
+FMA37705	triceps	R	160	right anconeus
+FMA37706	triceps	L	158	left anconeus
+FMA38454	forearms	R	160	right pronator quadratus
+FMA38455	forearms	L	160	left pronator quadratus
+FMA38460	forearms	R	308	right flexor carpi radialis
+FMA38461	forearms	L	304	left flexor carpi radialis
+FMA38463	forearms	R	360	right palmaris longus
+FMA38464	forearms	L	356	left palmaris longus
+FMA38479	forearms	R	576	right flexor digitorum profundus
+FMA38480	forearms	L	572	left flexor digitorum profundus
+FMA38482	forearms	R	158	right flexor pollicis longus
+FMA38484	forearms	L	160	left flexor pollicis longus
+FMA38486	forearms	R	602	right brachioradialis
+FMA38487	forearms	L	596	left brachioradialis
+FMA38495	forearms	R	304	right extensor carpi radialis longus
+FMA38496	forearms	L	302	left extensor carpi radialis longus
+FMA38498	forearms	R	266	right extensor carpi radialis brevis
+FMA38499	forearms	L	264	left extensor carpi radialis brevis
+FMA38501	forearms	R	496	right extensor digitorum
+FMA38502	forearms	L	490	left extensor digitorum
+FMA38504	forearms	R	176	right extensor digiti minimi
+FMA38505	forearms	L	174	left extensor digiti minimi
+FMA38513	forearms	R	208	right supinator
+FMA38514	forearms	L	206	left supinator
+FMA38522	forearms	R	158	right extensor pollicis longus
+FMA38523	forearms	L	158	left extensor pollicis longus
+FMA38525	forearms	R	158	right extensor indicis
+FMA38526	forearms	L	158	left extensor indicis
+FMA38560	forearms	R	204	humeral head of right pronator teres
+FMA38561	forearms	L	202	humeral head of left pronator teres
+FMA38562	forearms	R	158	ulnar head of right pronator teres
+FMA38563	forearms	L	158	ulnar head of left pronator teres
+FMA38617	forearms	R	328	humeral head of right flexor carpi ulnaris
+FMA38618	forearms	L	324	humeral head of left flexor carpi ulnaris
+FMA38619	forearms	R	280	ulnar head of right flexor carpi ulnaris
+FMA38620	forearms	L	276	ulnar head of left flexor carpi ulnaris
+FMA38638	forearms	R	604	humeroulnar head of right flexor digitorum superficialis
+FMA38639	forearms	L	598	humeroulnar head of left flexor digitorum superficialis
+FMA38640	forearms	R	236	radial head of right flexor digitorum superficialis
+FMA38641	forearms	L	232	radial head of left flexor digitorum superficialis
+FMA38928	quads	R	1558	right rectus femoris
+FMA38929	quads	L	1542	left rectus femoris
+FMA38930	quads	R	1776	right vastus lateralis
+FMA38931	quads	L	1758	left vastus lateralis
+FMA38932	quads	R	1210	right vastus medialis
+FMA38933	quads	L	1200	left vastus medialis
+FMA38934	quads	R	1178	right vastus intermedius
+FMA38935	quads	L	1170	left vastus intermedius
+FMA43883	adductors	R	906	right gracilis
+FMA43884	adductors	L	896	left gracilis
+FMA43886	adductors	R	168	right adductor minimus
+FMA43887	adductors	L	166	left adductor minimus
+FMA45874	pecs	R	364	abdominal part of right pectoralis major
+FMA45875	pecs	L	362	abdominal part of left pectoralis major
+FMA45888	hams	R	1364	long head of right biceps femoris
+FMA45889	hams	L	1342	long head of left biceps femoris
+FMA45891	hams	R	476	short head of right biceps femoris
+FMA45892	hams	L	470	short head of left biceps femoris
+FMA45957	calves	R	1140	medial head of right gastrocnemius
+FMA45958	calves	L	1132	medial head of left gastrocnemius
+FMA45960	calves	R	914	lateral head of right gastrocnemius
+FMA45961	calves	L	908	lateral head of left gastrocnemius
+FMA65014	other	R	492	right flexor hallucis longus
+FMA65015	other	L	490	left flexor hallucis longus
+FMA65016	other	R	568	right flexor digitorum longus
+FMA65017	other	L	562	left flexor digitorum longus
+FMA65018	other	R	498	right tibialis posterior
+FMA65019	other	L	494	left tibialis posterior
+FMA79979	pecs	R	1738	sternocostal part of right pectoralis major
+FMA79980	pecs	L	1732	sternocostal part of left pectoralis major

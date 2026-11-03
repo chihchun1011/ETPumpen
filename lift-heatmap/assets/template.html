@@ -1,0 +1,368 @@
+<title>Training Heatmap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: one column. Calories first, a rotatable 3D body as the centrepiece, a ranked set list below. */
+:root{
+  --bg:#eceff2; --fg:#14181c; --muted:#5a636d; --line:#d3d8de;
+  --m0:#c4cad1; --m1:#a9b0b8;
+  --h0:#f6b98a; --h1:#e2552d; --h2:#7d1a12; --over:#6a35c9;
+  --display:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Barlow',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101316; --fg:#eef0f2; --muted:#98a1ab; --line:#262c33;
+    --m0:#3c454e; --m1:#2a3137;
+    --h0:#f2a46e; --h1:#ef5b30; --h2:#c72a1b; --over:#a98bff;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101316; --fg:#eef0f2; --muted:#98a1ab; --line:#262c33;
+  --m0:#3c454e; --m1:#2a3137;
+  --h0:#f2a46e; --h1:#ef5b30; --h2:#c72a1b; --over:#a98bff;
+  color-scheme:dark;
+}
+body{
+  background:var(--bg); color:var(--fg); font-family:var(--body); font-size:15px;
+  padding-block:20px 32px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+main{max-width:460px;margin:0 auto;display:grid;gap:18px}
+.date{margin:0;font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.kcal{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+#kcal{font-family:var(--display);font-weight:600;font-size:84px;line-height:.88;color:var(--h1);font-variant-numeric:tabular-nums}
+.unit{font-family:var(--display);font-weight:500;font-size:24px;letter-spacing:.04em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:13px}
+.seg{display:inline-flex;margin-top:12px;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{font:500 12px var(--display);letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;background:transparent;color:var(--muted);border:0;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+#view{width:100%;aspect-ratio:4/5;max-width:100%;touch-action:pan-y;cursor:grab}
+#view canvas{display:block;width:100%;height:100%}
+.views{display:flex;gap:8px;justify-content:center}
+.views button{font:500 13px var(--display);letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:8px 20px;cursor:pointer}
+.views button:hover{border-color:var(--muted)}
+button:focus-visible{outline:2px solid var(--h1);outline-offset:2px}
+#readout{margin:0;text-align:center;min-height:1.4em;color:var(--muted);font-size:14px}
+#readout b{color:var(--fg);font-weight:500}
+.bars{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.bars li{display:grid;grid-template-columns:minmax(0,130px) 1fr 46px;align-items:center;gap:12px}
+.bars .name{display:grid;min-width:0}
+.bars .nm{font-size:14px}
+.bars .sb{font-size:11px;color:var(--muted)}
+.track{height:8px;background:var(--line);border-radius:2px;overflow:hidden}
+.fill{height:100%;border-radius:2px}
+.val{font-family:var(--display);font-weight:600;font-size:18px;text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:grid;gap:6px}
+.ramp{height:8px;border-radius:2px;background:linear-gradient(90deg,var(--m0),var(--h0),var(--h1),var(--h2))}
+.ticks{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.cap{margin:8px 0 0;color:var(--muted);font-size:12px}
+.h{margin:0 0 10px;font:500 14px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 10px 7px 0;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:12px}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.grp{font:500 13px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--h1);padding-top:14px}
+td.note{color:var(--muted)}
+.over{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px}
+.over i{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--over)}
+</style>
+
+<main>
+  <header>
+    <p class="date" id="date"></p>
+    <div class="kcal"><span id="kcal">0</span><span class="unit">kcal</span></div>
+    <p class="sub" id="sub"></p>
+    <div class="seg" role="group" aria-label="Report range"><button type="button" id="vDay" aria-pressed="true">Today</button><button type="button" id="vWeek" aria-pressed="false">This week</button><button type="button" id="vMonth" aria-pressed="false" hidden>This month</button></div>
+  </header>
+
+  <section>
+    <div id="view" role="img" aria-label="Rotatable 3D body with muscles colored by sets trained today"></div>
+    <div class="views">
+      <button type="button" id="bFront">Front</button>
+      <button type="button" id="bBack">Back</button>
+    </div>
+  </section>
+
+  <p id="readout" aria-live="polite">Drag to rotate. Tap a muscle.</p>
+
+  <section class="legend" aria-label="Color scale">
+    <div class="ramp"></div>
+    <div class="ticks"><span>0%</span><span>50%</span><span id="tick">100% of weekly target</span></div>
+    <div class="over"><i></i>Over the weekly max</div>
+  </section>
+
+  <section>
+    <h2 class="h" id="barsH">Today vs weekly target</h2>
+    <ul class="bars" id="bars"></ul>
+  </section>
+
+  <section>
+    <h2 class="h">Weekly targets</h2>
+    <div class="tw"><table id="tbl"></table></div>
+    <p class="cap">Hard sets per week. A main muscle counts 1 set, a helper 0.5. Targets come from your training profile. Calories are an estimate, about 25% either way. Anatomy: BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan.</p>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  var WEEK = __WEEK_JSON__;
+  var MONTH = __MONTH_JSON__;
+  var VIEW = 'day';
+  var DAY = WEEK.days[WEEK.days.length - 1];
+  function daysOf() {
+    if (VIEW === 'day') return [DAY];
+    if (VIEW === 'week') return WEEK.days;
+    return MONTH.weeks.reduce(function (a, w) { return a.concat(w.days); }, []);
+  }
+  // month view: targets scale with the number of weeks in the month
+  function weeks() { return VIEW === 'month' ? MONTH.weeks.length : 1; }
+  function cur(k) {
+    return daysOf().reduce(function (a, d) { return a + (d.sets_by_muscle[k] || 0); }, 0);
+  }
+
+  // weekly hard sets: [min, target, max, note]
+  var T = __TARGETS_JSON__;
+  var GROUPS = [
+    ['Legs', ['quads', 'hams', 'glutes', 'glutemed', 'adductors', 'calves', 'shins']],
+    ['Back', ['lats', 'midback', 'traps', 'lowback', 'delt_r']],
+    ['Chest and core', ['pecs', 'abs', 'obliques']],
+    ['Shoulders and arms', ['delt_f', 'delt_s', 'biceps', 'triceps', 'forearms']]
+  ];
+  function frac(k) { return cur(k) / (T[k][1] * weeks()); }
+  function colorOf(k, m0) {
+    var v = cur(k);
+    if (v <= 0) return m0;
+    if (v > T[k][2] * weeks()) return hex(cssVar('--over'));
+    return heat(frac(k));
+  }
+
+  var MUSCLES = [
+    ['quads', 'Quads'], ['hams', 'Hamstrings'], ['glutes', 'Glute max'], ['glutemed', 'Glute med'],
+    ['adductors', 'Adductors'], ['calves', 'Calves'], ['shins', 'Shins'],
+    ['lats', 'Lats'], ['midback', 'Mid back'], ['traps', 'Trapezius'], ['lowback', 'Lower back'], ['delt_r', 'Rear delt'],
+    ['pecs', 'Chest'], ['abs', 'Abs'], ['obliques', 'Obliques'],
+    ['delt_f', 'Front delt'], ['delt_s', 'Side delt'], ['biceps', 'Biceps'], ['triceps', 'Triceps'], ['forearms', 'Forearms']
+  ];
+  var LABELS = {};
+  MUSCLES.forEach(function (d) { LABELS[d[0]] = d[1]; });
+  LABELS.other = 'Other muscle';
+
+  function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function hex(h) { h = h.replace('#', ''); return [0, 2, 4].map(function (i) { return parseInt(h.substr(i, 2), 16); }); }
+  function mix(a, b, t) { return a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); }); }
+  function rgb(a) { return 'rgb(' + a.join(',') + ')'; }
+  function heat(v) {
+    var s = [hex(cssVar('--h0')), hex(cssVar('--h1')), hex(cssVar('--h2'))];
+    var t = Math.max(0, Math.min(v, 1));
+    return t < 0.5 ? mix(s[0], s[1], t * 2) : mix(s[1], s[2], (t - 0.5) * 2);
+  }
+  function fmt(v) { return (v % 1 === 0) ? String(v) : v.toFixed(1); }
+
+  (function buildTable() {
+    var label = {};
+    MUSCLES.forEach(function (d) { label[d[0]] = d[1]; });
+    var tbl = document.getElementById('tbl');
+    tbl.innerHTML = '<thead><tr><th>Muscle</th><th>Target</th><th>Range</th><th>Note</th></tr></thead>';
+    var tb = document.createElement('tbody');
+    GROUPS.forEach(function (g) {
+      var r = document.createElement('tr');
+      var h = document.createElement('td');
+      h.colSpan = 4; h.className = 'grp'; h.textContent = g[0];
+      r.appendChild(h); tb.appendChild(r);
+      g[1].forEach(function (k) {
+        var t = T[k], tr = document.createElement('tr');
+        [[label[k], ''], [String(t[1]), 'n'], [t[0] + '–' + t[2], 'n'], [t[3], 'note']].forEach(function (c) {
+          var td = document.createElement('td');
+          td.textContent = c[0]; td.className = c[1];
+          tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+    });
+    tbl.appendChild(tb);
+  })();
+
+  function renderHeader() {
+    var d = daysOf();
+    var sum = function (f) { return d.reduce(function (a, x) { return a + x[f]; }, 0); };
+    document.getElementById('date').textContent = VIEW === 'day' ? DAY.date : VIEW === 'week' ? 'Week ' + WEEK.label : MONTH.label + ' \u00b7 ' + weeks() + ' weeks';
+    document.getElementById('kcal').textContent = '\u2248' + sum('kcal');
+    document.getElementById('sub').textContent = (VIEW !== 'day' ? d.length + (d.length === 1 ? ' session \u00b7 ' : ' sessions \u00b7 ') : '') + sum('sets') + ' sets \u00b7 ' + sum('minutes') + ' min';
+  }
+  renderHeader();
+
+  var host = document.getElementById('view');
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(30, 4 / 5, 0.1, 50);
+  camera.position.set(0, 1.0, 4.6);
+  camera.lookAt(0, 0.92, 0);
+  var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  host.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.62));
+  var key = new THREE.DirectionalLight(0xffffff, 0.75); key.position.set(2, 3, 3); scene.add(key);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.45); rim.position.set(-2, 2, -3); scene.add(rim);
+
+  var body = new THREE.Group();
+  scene.add(body);
+  var mats = {};
+  var MODEL = "__MODEL_B64__";
+  (function buildModel() {
+    var bin = Uint8Array.from(atob(MODEL), function (c) { return c.charCodeAt(0); });
+    var dv = new DataView(bin.buffer);
+    var jl = dv.getUint32(0, true);
+    var meta = JSON.parse(new TextDecoder().decode(bin.subarray(4, 4 + jl)));
+    var base = 4 + jl;
+    meta.forEach(function (p) {
+      var q = new Uint16Array(bin.buffer.slice(base + p.po, base + p.po + p.nv * 6));
+      var ix = new Uint16Array(bin.buffer.slice(base + p.io, base + p.io + p.nf * 6));
+      var pos = new Float32Array(p.nv * 3);
+      for (var i = 0; i < p.nv; i++) {
+        for (var a = 0; a < 3; a++) pos[i * 3 + a] = p.lo[a] + q[i * 3 + a] / 65535 * p.ex[a];
+      }
+      var g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      g.setIndex(new THREE.BufferAttribute(ix, 1));
+      g.computeVertexNormals();
+      if (!mats[p.k]) mats[p.k] = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.6, metalness: 0, side: THREE.DoubleSide });
+      var m = new THREE.Mesh(g, mats[p.k]);
+      m.userData = { key: p.k, name: p.n };
+      body.add(m);
+    });
+  })();
+
+  var selected = null;
+  function setsOf(k) { return cur(k); }
+
+  function applyTheme() {
+    var m0 = hex(cssVar('--m0')), m1 = hex(cssVar('--m1'));
+    Object.keys(mats).forEach(function (k) {
+      var c = (k === 'other') ? m1 : colorOf(k, m0);
+      var mt = mats[k];
+      mt.color.setRGB(c[0] / 255, c[1] / 255, c[2] / 255);
+      var e = (selected === k) ? 0.22 : 0;
+      mt.emissive.setRGB(e, e, e);
+    });
+    renderBars();
+  }
+
+  function renderBars() {
+    var ul = document.getElementById('bars');
+    var wk = VIEW !== 'day';
+    var keys = wk ? Object.keys(T) : Object.keys(DAY.sets_by_muscle).filter(function (k) { return T[k]; });
+    keys.sort(function (a, b) { return wk ? frac(a) - frac(b) : frac(b) - frac(a); });
+    document.getElementById('barsH').textContent = { day: 'Today vs weekly target', week: 'Left to train this week', month: 'This month vs target' }[VIEW];
+    ul.innerHTML = '';
+    keys.forEach(function (k) {
+      var v = cur(k), tgt = T[k][1] * weeks();
+      var left = Math.max(Math.ceil(tgt - v), 0);
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="name"><span class="nm"></span><span class="sb"></span></span><span class="track"><span class="fill"></span></span><span class="val"></span>';
+      li.querySelector('.nm').textContent = LABELS[k];
+      var tail = '';
+      if (VIEW === 'week') tail = left > 0 ? ' \u00b7 ' + left + ' left' : ' \u00b7 done';
+      if (VIEW === 'month') tail = ' \u00b7 ' + fmt(Math.round(v / weeks() * 10) / 10) + ' per week';
+      li.querySelector('.sb').textContent = fmt(v) + ' of ' + tgt + ' sets' + tail;
+      var f = li.querySelector('.fill');
+      f.style.width = Math.min(frac(k), 1) * 100 + '%';
+      f.style.background = rgb(colorOf(k, [0, 0, 0]));
+      li.querySelector('.val').textContent = Math.round(frac(k) * 100) + '%';
+      ul.appendChild(li);
+    });
+  }
+
+  function resize() {
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(host);
+  window.addEventListener('resize', resize);
+  resize();
+
+  var rotY = -0.5, targetY = 0, snapping = false, auto = true, dragging = false;
+  var lastX = 0, moved = 0;
+  var cv = renderer.domElement;
+
+  cv.addEventListener('pointerdown', function (e) {
+    dragging = true; moved = 0; lastX = e.clientX; auto = false; snapping = false;
+    cv.setPointerCapture(e.pointerId); host.style.cursor = 'grabbing';
+  });
+  cv.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
+    rotY += dx * 0.011;
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false; host.style.cursor = 'grab';
+    if (moved < 6) pick(e);
+  }
+  cv.addEventListener('pointerup', endDrag);
+  cv.addEventListener('pointercancel', function () { dragging = false; host.style.cursor = 'grab'; });
+
+  function go(y) { auto = false; snapping = true; targetY = y; }
+  document.getElementById('bFront').addEventListener('click', function () { go(0); });
+  document.getElementById('bBack').addEventListener('click', function () { go(Math.PI); });
+  function setView(v) {
+    VIEW = v; selected = null;
+    document.getElementById('vDay').setAttribute('aria-pressed', String(v === 'day'));
+    document.getElementById('vWeek').setAttribute('aria-pressed', String(v === 'week'));
+    document.getElementById('vMonth').setAttribute('aria-pressed', String(v === 'month'));
+    document.getElementById('tick').textContent = v === 'month' ? '100% of monthly target' : '100% of weekly target';
+    document.getElementById('readout').textContent = 'Drag to rotate. Tap a muscle.';
+    renderHeader(); applyTheme();
+  }
+  document.getElementById('vDay').addEventListener('click', function () { setView('day'); });
+  document.getElementById('vWeek').addEventListener('click', function () { setView('week'); });
+  document.getElementById('vMonth').addEventListener('click', function () { setView('month'); });
+  if (MONTH) document.getElementById('vMonth').hidden = false;
+
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  function pick(e) {
+    var r = cv.getBoundingClientRect();
+    ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    var hit = ray.intersectObjects(body.children, false)[0];
+    var out = document.getElementById('readout');
+    if (!hit) { selected = null; out.textContent = 'Drag to rotate. Tap a muscle.'; applyTheme(); return; }
+    selected = hit.object.userData.key;
+    var v = setsOf(selected);
+    out.innerHTML = '<b></b>';
+    out.firstChild.textContent = LABELS[selected];
+    var tail = !T[selected] ? ' \u00b7 not tracked'
+      : (v > 0 ? ' \u00b7 ' + fmt(v) + { day: ' sets today', week: ' sets this week', month: ' sets this month' }[VIEW] + ' \u00b7 ' + Math.round(frac(selected) * 100) + (VIEW === 'month' ? '% of monthly target' : '% of weekly target') : { day: ' \u00b7 not trained today', week: ' \u00b7 not trained yet', month: ' \u00b7 not trained this month' }[VIEW]);
+    out.appendChild(document.createTextNode(tail));
+    applyTheme();
+  }
+
+  function frame() {
+    if (auto && !dragging) rotY += 0.0045;
+    else if (snapping && !dragging) {
+      var d = ((targetY - rotY + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+      rotY += d * 0.14;
+      if (Math.abs(d) < 0.002) snapping = false;
+    }
+    body.rotation.y = rotY;
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+
+  applyTheme();
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', applyTheme);
+  }
+  new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyTheme);
+  frame();
+})();
+</script>

@@ -1,0 +1,13 @@
+{
+ "_about": "How scripts/build_model.py places the BodyParts3D meshes. Source units are mm with z up and -y to the front. Output is metres with y up and +z to the front: x' = x/1000 * scale * width(y'), y' = z/1000 * scale, z' = -y/1000 * scale + z_offset. width is linear between [height_m, factor] points.",
+ "scale": 1.06,
+ "z_offset": -0.0868,
+ "width": {
+  "male": [[0.0, 1.0]],
+  "female": [
+   [0.40, 1.000], [0.50, 1.010], [0.60, 1.028], [0.70, 1.040], [0.80, 1.050], [0.88, 1.062],
+   [0.95, 1.033], [1.00, 0.999], [1.05, 0.963], [1.10, 0.927], [1.20, 0.902], [1.30, 0.875],
+   [1.36, 0.868], [1.45, 0.880]
+  ]
+ }
+}
